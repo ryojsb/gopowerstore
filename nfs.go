@@ -62,6 +62,26 @@ func (c *ClientIMPL) GetNFSExportByName(ctx context.Context, name string) (resp 
 	return nfsList[0], err
 }
 
+func (c *ClientIMPL) GetNFSExportById(ctx context.Context, id string) (resp NFSExport, err error) {
+    var nfsList []NFSExport
+    qp := getNFSExportDefaultQueryParams(c)
+    qp.RawArg("id", fmt.Sprintf("eq.%s", id))
+    _, err = c.APIClient().Query(
+        ctx,
+        RequestConfig{
+            Method:      "GET",
+            Endpoint:    nfsURL,
+            QueryParams: qp},
+        &nfsList)
+    err = WrapErr(err)
+    if err != nil {
+        return resp, err
+    }
+    if len(nfsList) != 1 {
+        return resp, NewNotFoundError()
+    }
+    return nfsList[0], err
+
 // GetNFSExportByName query and return specific NFS export by its filesystems name
 func (c *ClientIMPL) GetNFSExportByFileSystemID(ctx context.Context, fsID string) (resp NFSExport, err error) {
 	var nfsList []NFSExport
