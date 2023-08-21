@@ -81,6 +81,7 @@ func (c *ClientIMPL) GetNFSExportById(ctx context.Context, id string) (resp NFSE
         return resp, NewNotFoundError()
     }
     return nfsList[0], err
+}
 
 // GetNFSExportByName query and return specific NFS export by its filesystems name
 func (c *ClientIMPL) GetNFSExportByFileSystemID(ctx context.Context, fsID string) (resp NFSExport, err error) {
